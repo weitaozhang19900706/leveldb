@@ -1,0 +1,11 @@
+#!/bin/bash
+i=1
+sum=0
+while [ $i -le 10 ]
+do
+  let i++
+  make clean
+  ./sa>>test.txt
+  make 
+done
+
