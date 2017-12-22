@@ -6,7 +6,6 @@
 #include "leveldb/filter_policy.h"
 
 #define MAXN 112345
-#define Million 1000000
 //#define CHECK_INPUT
 
 using namespace std;
@@ -49,7 +48,7 @@ int main( ) {
     
     leveldb::Options options;
     options.block_cache = NULL;
-    options.filter_policy = leveldb::NewBloomFilterPolicy(4);
+    options.filter_policy = leveldb::NewBloomFilterPolicy(20);
     options.create_if_missing = true;
     leveldb::DB* db;
     std::string dbpath = "tdb";   
@@ -70,7 +69,6 @@ int main( ) {
     gettimeofday(&tvmain, NULL);
     t_start = (double)tvmain.tv_sec + (double)tvmain.tv_usec * 1e-6;
     
-    int count = 0;
     
     while (getline(infile, str)) {
        
@@ -106,26 +104,21 @@ int main( ) {
             cout << key << " " << str << endl;
 #endif
         }
-        
-        
-        count ++;
-	if( count % Million == 0)
-	    db->Summary();
-	  
-	 
-	    
-	
     }
     
     infile.close();
     
     
+    gettimeofday(&tvmain, NULL);
+    t_end = (double)tvmain.tv_sec + (double)tvmain.tv_usec * 1e-6;
+    t_duration = t_end - t_start;
+
+    printf("Get  : %0.6f\n ", t_duration);
+    
+    //db->Get_time();
     
     
-    db->Summary();
-    
-    
-    //system("cp tdb/LOG ../../log"); 
+    system("cp tdb/LOG ../../log"); 
     
     
     delete db;

@@ -984,12 +984,6 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
   delete input;
   input = NULL;
 
-  //added by weitao, to calculate compaction overhead
-  
-  extern int compaction_write;
-  extern int compaction_read;
-  
-  
   CompactionStats stats;
   stats.micros = env_->NowMicros() - start_micros - imm_micros;
   for (int which = 0; which < 2; which++) {
@@ -997,12 +991,9 @@ Status DBImpl::DoCompactionWork(CompactionState* compact) {
       stats.bytes_read += compact->compaction->input(which, i)->file_size;
     }
   }
-  compaction_read += stats.bytes_read/1024/1024; //weitao
-  
   for (size_t i = 0; i < compact->outputs.size(); i++) {
     stats.bytes_written += compact->outputs[i].file_size;
   }
-  compaction_write += stats.bytes_written/1024/1024;//weitao
 
   mutex_.Lock();
   stats_[compact->compaction->level() + 1].Add(stats);

@@ -17,7 +17,7 @@ int main( ) {
     
     leveldb::Options options;
     options.block_cache = NULL;
-    options.filter_policy = leveldb::NewBloomFilterPolicy(4);
+    options.filter_policy = leveldb::NewBloomFilterPolicy(20);
     options.max_open_files = 1000;
     
     leveldb::DB* db;
@@ -88,7 +88,7 @@ int main( ) {
     
     printf("       %.3lf  time: \n", t_duration);
     printf("       %d, %d   \n", total, found);
-    db->Summary();
+    db->Get_time();
     
 
     delete db;

@@ -213,7 +213,7 @@ Iterator* Table::NewIterator(const ReadOptions& options) const {
       &Table::BlockReader, const_cast<Table*>(this), options);
 }
 
-//added by weitao, we want to statistics block read times.
+//added by weitao, to statistics block read times
 extern int block_read_times;
 
 Status Table::InternalGet(const ReadOptions& options, const Slice& k,
@@ -232,8 +232,7 @@ Status Table::InternalGet(const ReadOptions& options, const Slice& k,
       // Not found
     } else {
       
-      block_read_times++; //added by weitao, block_read times
-            
+      block_read_times++;
       Iterator* block_iter = BlockReader(this, options, iiter->value());
       block_iter->Seek(k);
       if (block_iter->Valid()) {

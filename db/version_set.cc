@@ -31,8 +31,6 @@ static const int64_t kMaxGrandParentOverlapBytes = 10 * kTargetFileSize;
 // total compaction cover more than this many bytes.
 static const int64_t kExpandedCompactionByteSizeLimit = 25 * kTargetFileSize;
 
-
-
 static double MaxBytesForLevel(int level) {
   // Note: the result for level zero is not really used since we set
   // the level-0 compaction threshold based on number of files.
@@ -43,23 +41,6 @@ static double MaxBytesForLevel(int level) {
   }
   return result;
 }
-
-//static const double LEVEL_SIZE[7] = {10 * 1048576.0, 10 * 1048576.0, 100 * 1048576.0, 1000 * 1048576.0, 10000 * 1048576.0, 100000 * 1048576.0, 1000000 * 1048576.0 };
-
-
-//weitao
-/*static double MaxBytesForLevel(int level) {
-  // Note: the result for level zero is not really used since we set
-  // the level-0 compaction threshold based on number of files.
-  double result = 10 * 1048576.0;  // Result for both level-0 and level-1
-  
-  while (level > 1) {
-    result *= 3;
-    level--;
-  }
-  return result;
-}*/
-
 
 static uint64_t MaxFileSizeForLevel(int level) {
   return kTargetFileSize;  // We could vary per level to reduce number of files?
@@ -1040,21 +1021,8 @@ int VersionSet::NumLevelFiles(int level) const {
   return current_->files_[level].size();
 }
 
-//weitao
-extern int Level_Summary[20];
-
 const char* VersionSet::LevelSummary(LevelSummaryStorage* scratch) const {
   // Update code if kNumLevels changes
-  
-   //weitao
-  Level_Summary[0] = current_->files_[0].size();
-  Level_Summary[1] = current_->files_[1].size();
-  Level_Summary[2] = current_->files_[2].size();
-  Level_Summary[3] = current_->files_[3].size();
-  Level_Summary[4] = current_->files_[4].size();
-  Level_Summary[5] = current_->files_[5].size();
-  Level_Summary[6] = current_->files_[6].size();
-  
   assert(config::kNumLevels == 7);
   snprintf(scratch->buffer, sizeof(scratch->buffer),
            "files[ %d %d %d %d %d %d %d ]",
@@ -1065,7 +1033,6 @@ const char* VersionSet::LevelSummary(LevelSummaryStorage* scratch) const {
            int(current_->files_[4].size()),
            int(current_->files_[5].size()),
            int(current_->files_[6].size()));
-  
   return scratch->buffer;
 }
 

@@ -37,19 +37,13 @@ double BlockReader_Srt, BlockReader_End, BlockReader_duration = 0;
 double indexblock_Srt, indexblock_End, indexblock_duration = 0;
 double iterSeek_Srt, iterSeek_End, iterSeek_duration = 0;
 
-//counting by MB
-int compaction_read = 0;  
-int compaction_write = 0; 
+int compaction_overhead = 0;
 
 int block_read_times = 0;
 
 int mem_hit_times = 0;
 int filter_negative_times = 0;
 int find_table_times = 0;
-
-int Level_Summary[20] = {0};//counting the sstables in each level
-
-
 
 struct Options;
 struct ReadOptions;
@@ -175,7 +169,7 @@ class DB {
   //    db->CompactRange(NULL, NULL);
   virtual void CompactRange(const Slice* begin, const Slice* end) = 0;
 
-  /*
+  
   void Time_setup()
   {
        Get_Srt = Get_End = Get_duration = 0;
@@ -200,10 +194,10 @@ class DB {
        mem_hit_times = 0;
        filter_negative_times = 0;
        find_table_times = 0;
-  }*/
+  }
   
   //add to get duration
-  void Summary()
+  void Get_time()
   {
 
        //printf("Get  : %0.6f\n ", Get_duration);
@@ -223,38 +217,11 @@ class DB {
        printf("find_table_times %d\n " , find_table_times);
        printf("filter_negative_times %d\n", filter_negative_times);*/
       
-       printf("compaction_read: %d\n ", compaction_read);
+       printf("compaction_overhead: %d\n ", compaction_overhead);
+       printf("block_read_times: %d\n ", block_read_times);
        
-       printf("compaction_write: %d\n ", compaction_write);
-       
-       //printf("block_read_times: %d\n ", block_read_times);
-       
-       /*
-       int i = 0;
-       for(i=0;i<7;i++)
-	 printf("%d ",Level_Summary[i]);
-       
-       printf("\n");
-       */
   }
  
- /*
- const char* VersionSet::LevelSummary(LevelSummaryStorage* scratch) const {
-  // Update code if kNumLevels changes
-  assert(config::kNumLevels == 7);
-  snprintf(scratch->buffer, sizeof(scratch->buffer),
-           "files[ %d %d %d %d %d %d %d ]",
-           int(current_->files_[0].size()),
-           int(current_->files_[1].size()),
-           int(current_->files_[2].size()),
-           int(current_->files_[3].size()),
-           int(current_->files_[4].size()),
-           int(current_->files_[5].size()),
-           int(current_->files_[6].size()));
-  return scratch->buffer;
-}*/
- 
-
   
  private:
   // No copying allowed
